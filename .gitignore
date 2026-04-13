@@ -1,4 +1,15 @@
-# Project exclude paths
-/.gradle/
-/app/build/
-/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+# Gradle
+.gradle/
+build/
+*/build/
+
+# Local config
+local.properties
+
+# IDE
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
