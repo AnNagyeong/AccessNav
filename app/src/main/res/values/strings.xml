@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AccessNav</string>
+    <string name="search_hint">장소를 입력하세요</string>
+    <string name="route_to">한양여자대학교 도서관까지</string>
+    <string name="start_nav">안내 시작</string>
+    <string name="route_list">경로 목록</string>
+    <string name="report">제보하기</string>
+    <string name="favorite">즐겨찾기</string>
+    <string name="option_filter">옵션 필터</string>
+    <string name="accessible_restroom">장애인 화장실</string>
+    <string name="barrier_free_store">베리어프리 매장</string>
+    <string name="elevator">엘리베이터</string>
+    <string name="accessible_parking">장애인 전용 주차장</string>
+    <string name="bus_stop">버스 정류장</string>
+    <string name="danger_report">위험 구간 제보</string>
+    <string name="submit_report">제보하기</string>
+    <string name="route_guidance">경로 안내</string>
+</resources>

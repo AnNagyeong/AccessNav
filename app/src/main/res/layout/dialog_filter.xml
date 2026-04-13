@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/card_bg"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/option_filter"
+            android:textSize="17sp"
+            android:textStyle="bold"/>
+        <ImageView
+            android:id="@+id/btnClose"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:tint="#757575"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:orientation="horizontal"
+        android:gravity="center_vertical" android:paddingVertical="10dp">
+        <TextView android:text="@string/accessible_restroom"
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:textSize="14sp"/>
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchRestroom"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:orientation="horizontal"
+        android:gravity="center_vertical" android:paddingVertical="10dp">
+        <TextView android:text="@string/barrier_free_store"
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:textSize="14sp"/>
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchBarrierFree"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:orientation="horizontal"
+        android:gravity="center_vertical" android:paddingVertical="10dp">
+        <TextView android:text="@string/elevator"
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:textSize="14sp"/>
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchElevator"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:orientation="horizontal"
+        android:gravity="center_vertical" android:paddingVertical="10dp">
+        <TextView android:text="@string/accessible_parking"
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:textSize="14sp"/>
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchParking"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:orientation="horizontal"
+        android:gravity="center_vertical" android:paddingVertical="10dp">
+        <TextView android:text="@string/bus_stop"
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:textSize="14sp"/>
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchBusStop"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>

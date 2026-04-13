@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:background="@color/card_bg">
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@android:drawable/ic_media_previous"
+            android:padding="4dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/danger_report"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:paddingStart="8dp"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Category -->
+            <TextView android:text="제보 유형"
+                android:textSize="14sp" android:textStyle="bold"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"/>
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipConstruction"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="공사" style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipSlip"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="미끄럼" style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipStep"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="턱" style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipElderly"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="고령자 노면" style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipOther"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="기타" style="@style/Widget.MaterialComponents.Chip.Choice"/>
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- Location -->
+            <TextView android:text="위치"
+                android:textSize="14sp" android:textStyle="bold"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"/>
+            <EditText
+                android:id="@+id/etLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="서울특별시 성동구 살곶이길 200"
+                android:background="@drawable/edit_text_bg"
+                android:padding="12dp"
+                android:textSize="14sp"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Danger level -->
+            <TextView android:text="접근 주의(예매)"
+                android:textSize="14sp" android:textStyle="bold"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"/>
+            <SeekBar
+                android:id="@+id/seekBarDanger"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:progress="10"
+                android:progressTint="#F44336"
+                android:thumbTint="#F44336"
+                android:layout_marginBottom="4dp"/>
+            <TextView
+                android:id="@+id/tvDangerPercent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10%"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Description -->
+            <TextView android:text="상세 설명"
+                android:textSize="14sp" android:textStyle="bold"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"/>
+            <EditText
+                android:id="@+id/etDescription"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:hint="어떤 위험이 있었나요? 자세하게 작성해 주시면 도움이 됩니다."
+                android:background="@drawable/edit_text_bg"
+                android:padding="12dp"
+                android:textSize="13sp"
+                android:gravity="top"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Photo -->
+            <TextView android:text="상세 설명"
+                android:textSize="14sp" android:textStyle="bold"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"/>
+            <Button
+                android:id="@+id/btnAddPhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="사진 첨부 또는 현장에서 선택"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_margin="16dp"
+        android:text="@string/submit_report"
+        android:backgroundTint="@color/green_primary"
+        style="@style/Widget.MaterialComponents.Button"/>
+</LinearLayout>
