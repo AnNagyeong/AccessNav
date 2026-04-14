@@ -219,62 +219,7 @@
             android:tint="@color/gray_500" />
     </LinearLayout>
 
-    <!-- 예시 마커 오버레이 -->
-    <TextView
-        android:id="@+id/pinBlue1"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="236dp"
-        android:background="@drawable/bg_pin_blue"
-        android:gravity="center"
-        android:text="•"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@id/webMap"
-        app:layout_constraintTop_toTopOf="@id/webMap" />
-
-    <TextView
-        android:id="@+id/pinBlue2"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="262dp"
-        android:background="@drawable/bg_pin_blue"
-        android:gravity="center"
-        android:text="•"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@id/webMap"
-        app:layout_constraintTop_toTopOf="@id/webMap" />
-
-    <TextView
-        android:id="@+id/pinYellow1"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="388dp"
-        android:background="@drawable/bg_pin_yellow"
-        android:gravity="center"
-        android:text="★"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@id/webMap"
-        app:layout_constraintTop_toTopOf="@id/webMap" />
-
-    <TextView
-        android:id="@+id/pinYellow2"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="90dp"
-        android:layout_marginTop="494dp"
-        android:background="@drawable/bg_pin_yellow"
-        android:gravity="center"
-        android:text="★"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@id/webMap"
-        app:layout_constraintTop_toTopOf="@id/webMap" />
+    <!-- 예시 마커 오버레이 들어가는 부분인데 보류 -->
 
     <!-- 좌하단 개수 -->
     <LinearLayout
@@ -293,7 +238,7 @@
         <ImageView
             android:layout_width="14dp"
             android:layout_height="14dp"
-            android:src="@drawable/ic_layers_24"
+            android:src="@drawable/ic_weather_16"
             android:tint="@color/gray_500"
             android:scaleType="centerInside" />
 

@@ -256,11 +256,10 @@
     window.filterMarkers = filterMarkers;
     window.map = map;
 
-    window.onload = async function () {
-      initMap();
-      window.map = map;
-      await loadPoiData();
-    };
+    window.onload = function () {
+  initMap();
+  window.map = map;
+};
 </script>
 </body>
 </html>
