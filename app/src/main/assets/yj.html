@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>AccessNav Map</title>
+    <style>
+        html, body {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          background: #ffffff;
+          font-family: sans-serif;
+        }
+
+        #map {
+          width: 100%;
+          height: 100%;
+        }
+
+        .custom-marker {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #ffffff;
+          font-size: 13px;
+          font-weight: bold;
+          box-sizing: border-box;
+          border: 2px solid rgba(255,255,255,0.95);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+          user-select: none;
+        }
+
+        .marker-taxi {
+          background: #f6b500;
+        }
+
+        .marker-store {
+          background: #5aa7ff;
+        }
+
+        .marker-cafe {
+          background: #f26a6a;
+        }
+
+        .marker-favorite {
+          background: #444444;
+        }
+
+        .marker-default {
+          background: #49d11a;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+
+<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=80e48dd01aae3f043d16e5ad41071f5d&libraries=services"></script>
+<script>
+    let map;
+    let markers = [];
+    let currentCategory = "all";
+
+    const DEFAULT_CENTER = {
+      lat: 37.56184,
+      lng: 127.03811
+    };
+
+    const DEFAULT_LEVEL = 3;
+
+    function initMap() {
+      const container = document.getElementById("map");
+      const options = {
+        center: new kakao.maps.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng),
+        level: DEFAULT_LEVEL
+      };
+
+      map = new kakao.maps.Map(container, options);
+      map.setZoomable(true);
+    }
+
+    function clearMarkers() {
+      markers.forEach(marker => marker.setMap(null));
+      markers = [];
+    }
+
+    function normalizeCategory(item) {
+      const raw = String(
+        item.category ?? item.type ?? item.kind ?? item.group ?? ""
+      ).toLowerCase();
+
+      if (raw.includes("taxi") || raw.includes("택시") || raw.includes("정류장")) {
+        return "taxi";
+      }
+
+      if (raw.includes("store") || raw.includes("편의점") || raw.includes("storefront")) {
+        return "store";
+      }
+
+      if (raw.includes("cafe") || raw.includes("카페") || raw.includes("coffee")) {
+        return "cafe";
+      }
+
+      if (raw.includes("favorite") || raw.includes("즐겨찾기") || raw.includes("star")) {
+        return "favorite";
+      }
+
+      return "default";
+    }
+
+    function parseLatLng(item) {
+      const lat = item.lat ?? item.latitude ?? item.y ?? item.mapy ?? null;
+      const lng = item.lng ?? item.lon ?? item.longitude ?? item.x ?? item.mapx ?? null;
+
+      if (lat == null || lng == null) return null;
+
+      const latNum = Number(lat);
+      const lngNum = Number(lng);
+
+      if (Number.isNaN(latNum) || Number.isNaN(lngNum)) return null;
+
+      return { lat: latNum, lng: lngNum };
+    }
+
+    function getMarkerSymbol(category) {
+      switch (category) {
+        case "taxi":
+          return "★";
+        case "store":
+          return "●";
+        case "cafe":
+          return "●";
+        case "favorite":
+          return "★";
+        default:
+          return "•";
+      }
+    }
+
+    function getMarkerClass(category) {
+      switch (category) {
+        case "taxi":
+          return "marker-taxi";
+        case "store":
+          return "marker-store";
+        case "cafe":
+          return "marker-cafe";
+        case "favorite":
+          return "marker-favorite";
+        default:
+          return "marker-default";
+      }
+    }
+
+    function createMarker(item) {
+      const pos = parseLatLng(item);
+      if (!pos) return null;
+
+      const category = normalizeCategory(item);
+
+      if (currentCategory !== "all" && currentCategory !== category) {
+        return null;
+      }
+
+      const markerEl = document.createElement("div");
+      markerEl.className = `custom-marker ${getMarkerClass(category)}`;
+      markerEl.textContent = getMarkerSymbol(category);
+
+      const overlay = new kakao.maps.CustomOverlay({
+        position: new kakao.maps.LatLng(pos.lat, pos.lng),
+        content: markerEl,
+        yAnchor: 1
+      });
+
+      overlay.setMap(map);
+
+      markerEl.addEventListener("click", () => {
+        const title = item.name || item.title || item.place_name || "장소";
+        console.log("clicked:", title);
+      });
+
+      return overlay;
+    }
+
+    function renderMarkers(data) {
+      clearMarkers();
+
+      if (!Array.isArray(data)) {
+        console.warn("poi.json must be an array.");
+        return;
+      }
+
+      data.forEach(item => {
+        const marker = createMarker(item);
+        if (marker) {
+          markers.push(marker);
+        }
+      });
+    }
+
+    async function loadPoiData() {
+      try {
+        const response = await fetch("./poi.json");
+        if (!response.ok) {
+          throw new Error("poi.json load failed: " + response.status);
+        }
+
+        const data = await response.json();
+        renderMarkers(data);
+      } catch (e) {
+        console.error("poi.json load error:", e);
+      }
+    }
+
+    function filterMarkers(category) {
+      currentCategory = category || "all";
+      loadPoiData();
+    }
+
+    function zoomIn() {
+      if (!map) return;
+      map.setLevel(map.getLevel() - 1);
+    }
+
+    function zoomOut() {
+      if (!map) return;
+      map.setLevel(map.getLevel() + 1);
+    }
+
+    function moveTo(lat, lng, level) {
+      if (!map) return;
+      map.setCenter(new kakao.maps.LatLng(Number(lat), Number(lng)));
+      if (level !== undefined && level !== null) {
+        map.setLevel(Number(level));
+      }
+    }
+
+    function resetMap() {
+      if (!map) return;
+      map.setCenter(new kakao.maps.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng));
+      map.setLevel(DEFAULT_LEVEL);
+    }
+
+    window.zoomIn = zoomIn;
+    window.zoomOut = zoomOut;
+    window.moveTo = moveTo;
+    window.resetMap = resetMap;
+    window.filterMarkers = filterMarkers;
+    window.map = map;
+
+    window.onload = async function () {
+      initMap();
+      window.map = map;
+      await loadPoiData();
+    };
+</script>
+</body>
+</html>

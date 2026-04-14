@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <resources>
-    <color name="green_primary">#4CAF50</color>
-    <color name="green_dark">#388E3C</color>
-    <color name="yellow_accent">#FFC107</color>
-    <color name="red_pin">#F44336</color>
-    <color name="blue_pin">#2196F3</color>
+    <color name="bg_app">#F5F5F5</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#222222</color>
+    <color name="gray_500">#8E8E8E</color>
+    <color name="chip_text">#333333</color>
+    <color name="blue_main">#5AA7FF</color>
+    <color name="yellow_main">#F6B500</color>
+
+    <!-- 기존 화면들도 같이 쓰는 색 -->
+    <color name="text_primary">#222222</color>
+    <color name="text_secondary">#8E8E8E</color>
+    <color name="green_primary">#49D11A</color>
+    <color name="yellow_accent">#F6B500</color>
+    <color name="card_bg">#F3F3F3</color>
     <color name="bg_light">#F5F5F5</color>
-    <color name="card_bg">#FFFFFF</color>
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
-    <color name="divider">#E0E0E0</color>
-    <color name="route_step_border">#4CAF50</color>
+    <color name="divider">#DADADA</color>
+
+    <!-- 추가로 자주 쓰기 좋은 것 -->
+    <color name="red_main">#F26A6A</color>
+    <color name="blue_primary">#5AA7FF</color>
+    <color name="gray_100">#F3F3F3</color>
+    <color name="gray_300">#DADADA</color>
 </resources>
