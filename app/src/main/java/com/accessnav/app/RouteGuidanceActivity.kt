@@ -2,9 +2,9 @@ package com.accessnav.app
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -26,25 +26,33 @@ class RouteGuidanceActivity : AppCompatActivity() {
         binding = ActivityRouteGuidanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        steps.forEach { step -> addStepView(step) }
+        steps.forEachIndexed { index, step -> addStepView(step, index == steps.lastIndex) }
 
         binding.btnBack.setOnClickListener { finish() }
         binding.btnReport.setOnClickListener {
             startActivity(Intent(this, ReportActivity::class.java))
         }
+        binding.btnFavorite.setOnClickListener {
+            startActivity(Intent(this, FavoritesActivity::class.java))
+        }
     }
 
-    private fun addStepView(step: RouteStep) {
+    private fun addStepView(step: RouteStep, isLast: Boolean) {
         val itemView = LayoutInflater.from(this)
             .inflate(R.layout.item_route_step, binding.stepsContainer, false)
-        itemView.findViewById<View>(R.id.stepIndicator)
-            .setBackgroundColor(Color.parseColor(step.color))
+        val indicator = itemView.findViewById<View>(R.id.stepIndicator)
+        indicator.background = GradientDrawable().apply {
+            shape = GradientDrawable.OVAL
+            setColor(Color.parseColor(step.color))
+        }
+        itemView.findViewById<View>(R.id.stepLine).visibility = if (isLast) {
+            View.INVISIBLE
+        } else {
+            View.VISIBLE
+        }
         itemView.findViewById<TextView>(R.id.tvStepTitle).text = step.title
         itemView.findViewById<TextView>(R.id.tvStepDesc).text = step.description
 
-        val lp = itemView.layoutParams as LinearLayout.LayoutParams
-        lp.bottomMargin = 12
-        itemView.layoutParams = lp
         binding.stepsContainer.addView(itemView)
     }
 }

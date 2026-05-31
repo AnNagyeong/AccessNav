@@ -10,16 +10,15 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="never"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 상단 검색바 -->
     <LinearLayout
         android:id="@+id/topSearchWrap"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="52dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -29,16 +28,17 @@
         android:orientation="horizontal"
         android:paddingStart="14dp"
         android:paddingEnd="14dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/btnMenu"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:contentDescription="메뉴"
             android:src="@drawable/ic_menu_24"
-            android:tint="@color/gray_500" />
+            android:tint="@color/black" />
 
         <EditText
             android:id="@+id/etSearch"
@@ -47,9 +47,11 @@
             android:layout_marginStart="12dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:hint="장소를 입력하세요"
+            android:hint="@string/search_hint"
+            android:imeOptions="actionSearch"
             android:inputType="text"
             android:maxLines="1"
+            android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="@color/gray_500"
             android:textSize="13sp" />
@@ -58,11 +60,11 @@
             android:id="@+id/btnClear"
             android:layout_width="18dp"
             android:layout_height="18dp"
+            android:contentDescription="검색어 지우기"
             android:src="@drawable/ic_close_20"
             android:tint="@color/gray_500" />
     </LinearLayout>
 
-    <!-- 칩 -->
     <LinearLayout
         android:id="@+id/chipRow"
         android:layout_width="wrap_content"
@@ -70,8 +72,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/topSearchWrap"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topSearchWrap">
 
         <LinearLayout
             android:id="@+id/chipTaxi"
@@ -151,7 +153,30 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- 오른쪽 버튼 2개 -->
+    <ScrollView
+        android:id="@+id/resultScroll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_card_white"
+        android:elevation="12dp"
+        android:maxHeight="260dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chipRow">
+
+        <LinearLayout
+            android:id="@+id/resultList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp" />
+    </ScrollView>
+
     <LinearLayout
         android:id="@+id/rightActionWrap"
         android:layout_width="wrap_content"
@@ -159,14 +184,15 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/topSearchWrap"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topSearchWrap">
 
         <ImageView
             android:id="@+id/btnFavorite"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:background="@drawable/bg_round_18_white"
+            android:contentDescription="@string/favorite"
             android:elevation="6dp"
             android:padding="10dp"
             android:src="@drawable/ic_star_24"
@@ -178,13 +204,25 @@
             android:layout_height="42dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/bg_round_18_white"
+            android:contentDescription="@string/option_filter"
             android:elevation="6dp"
             android:padding="10dp"
             android:src="@drawable/ic_layers_24"
             android:tint="@color/gray_500" />
+
+        <ImageView
+            android:id="@+id/btnCurrentLocation"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_round_18_white"
+            android:contentDescription="현재 위치"
+            android:elevation="6dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_current_location_24"
+            android:tint="@color/gray_500" />
     </LinearLayout>
 
-    <!-- 줌 버튼 -->
     <LinearLayout
         android:id="@+id/zoomWrap"
         android:layout_width="42dp"
@@ -219,40 +257,36 @@
             android:tint="@color/gray_500" />
     </LinearLayout>
 
-    <!-- 예시 마커 오버레이 들어가는 부분인데 보류 -->
-
-    <!-- 좌하단 개수 -->
     <LinearLayout
         android:id="@+id/spotCountWrap"
-        android:layout_width="52dp"
-        android:layout_height="28dp"
+        android:layout_width="58dp"
+        android:layout_height="30dp"
         android:layout_marginStart="18dp"
         android:layout_marginBottom="90dp"
         android:background="@drawable/bg_round_18_white"
         android:elevation="6dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomBar">
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:layout_width="14dp"
             android:layout_height="14dp"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_weather_16"
-            android:tint="@color/gray_500"
-            android:scaleType="centerInside" />
+            android:tint="@color/gray_500" />
 
         <TextView
             android:id="@+id/spotCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="16"
+            android:text="16°"
             android:textColor="@color/black"
             android:textSize="12sp" />
     </LinearLayout>
 
-    <!-- 하단 네비 -->
     <LinearLayout
         android:id="@+id/bottomBar"
         android:layout_width="0dp"
@@ -261,68 +295,78 @@
         android:elevation="10dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:id="@+id/navHome"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:gravity="center">
 
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
                 android:src="@drawable/ic_home_24"
                 android:tint="@color/black" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/navAccessibility"
+            android:id="@+id/navLocation"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:gravity="center">
 
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:src="@drawable/ic_accessibility_24"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:src="@drawable/ic_location_pin_24"
                 android:tint="@color/gray_500" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/navCamera"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:gravity="center">
 
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
                 android:src="@drawable/ic_camera_24"
+                android:tint="@color/gray_500" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navBookmark"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:src="@drawable/ic_bookmark_24"
                 android:tint="@color/gray_500" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/navProfile"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:gravity="center">
 
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
                 android:src="@drawable/ic_person_24"
                 android:tint="@color/gray_500" />
         </LinearLayout>

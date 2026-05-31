@@ -1,151 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/bg_light">
+    android:background="@color/bg_light"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="horizontal"
+        android:layout_height="64dp"
+        android:background="@color/white"
         android:gravity="center_vertical"
-        android:paddingHorizontal="16dp"
-        android:background="@color/card_bg">
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp">
+
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@android:drawable/ic_media_previous"
-            android:padding="4dp"/>
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="뒤로가기"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_back_24"
+            android:tint="@color/black" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
             android:text="@string/danger_report"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:paddingStart="8dp"/>
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:fillViewport="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="24dp">
 
-            <!-- Category -->
-            <TextView android:text="제보 유형"
-                android:textSize="14sp" android:textStyle="bold"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="제보 유형"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroupType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="22dp"
+                app:singleSelection="true">
+
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipConstruction"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="공사" style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                    style="@style/ReportTypeChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="급경사" />
+
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipSlip"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="미끄럼" style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                    style="@style/ReportTypeChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="파손 보도" />
+
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipStep"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="턱" style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                    style="@style/ReportTypeChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="단차" />
+
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipElderly"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="고령자 노면" style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                    style="@style/ReportTypeChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="미끄러운 노면" />
+
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipOther"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="기타" style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                    style="@style/ReportTypeChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="기타" />
             </com.google.android.material.chip.ChipGroup>
 
-            <!-- Location -->
-            <TextView android:text="위치"
-                android:textSize="14sp" android:textStyle="bold"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="위치"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/etLocation"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="서울특별시 성동구 살곶이길 200"
+                android:layout_height="52dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="22dp"
                 android:background="@drawable/edit_text_bg"
-                android:padding="12dp"
-                android:textSize="14sp"
-                android:layout_marginBottom="16dp"/>
+                android:hint="위치가 여기에 표시됩니다."
+                android:paddingHorizontal="14dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/text_secondary"
+                android:textSize="14sp" />
 
-            <!-- Danger level -->
-            <TextView android:text="접근 주의(예매)"
-                android:textSize="14sp" android:textStyle="bold"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="경사도 추정(선택)"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
             <SeekBar
                 android:id="@+id/seekBarDanger"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:max="100"
                 android:progress="10"
-                android:progressTint="#F44336"
-                android:thumbTint="#F44336"
-                android:layout_marginBottom="4dp"/>
+                android:progressTint="@color/red_main"
+                android:thumbTint="@color/red_main" />
+
             <TextView
                 android:id="@+id/tvDangerPercent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="22dp"
                 android:text="10%"
-                android:textSize="12sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginBottom="16dp"/>
+                android:textColor="@color/red_main"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-            <!-- Description -->
-            <TextView android:text="상세 설명"
-                android:textSize="14sp" android:textStyle="bold"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="상세 설명"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/etDescription"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:hint="어떤 위험이 있었나요? 자세하게 작성해 주시면 도움이 됩니다."
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="22dp"
                 android:background="@drawable/edit_text_bg"
-                android:padding="12dp"
-                android:textSize="13sp"
                 android:gravity="top"
-                android:layout_marginBottom="16dp"/>
+                android:hint="어떤 위험이 있었나요? 자세하게 작성해 주세요."
+                android:padding="14dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/text_secondary"
+                android:textSize="14sp" />
 
-            <!-- Photo -->
-            <TextView android:text="상세 설명"
-                android:textSize="14sp" android:textStyle="bold"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사진 첨부"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
             <Button
                 android:id="@+id/btnAddPhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="사진 첨부 또는 현장에서 선택"
-                android:textSize="12sp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="10dp"
+                android:text="사진 촬영 또는 앨범에서 선택"
                 android:textColor="@color/text_secondary"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                android:textSize="14sp" />
         </LinearLayout>
     </ScrollView>
 
     <Button
         android:id="@+id/btnSubmit"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_margin="16dp"
-        android:text="@string/submit_report"
         android:backgroundTint="@color/green_primary"
-        style="@style/Widget.MaterialComponents.Button"/>
+        android:text="@string/submit_report"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:textStyle="bold" />
 </LinearLayout>

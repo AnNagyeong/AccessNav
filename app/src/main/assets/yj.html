@@ -58,6 +58,60 @@
         .marker-default {
           background: #49d11a;
         }
+
+        .current-location-marker {
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          background: #1f86ff;
+          border: 4px solid #ffffff;
+          box-shadow: 0 0 0 8px rgba(31, 134, 255, 0.18), 0 2px 8px rgba(0,0,0,0.22);
+          box-sizing: border-box;
+        }
+
+        .route-point {
+          min-width: 34px;
+          height: 34px;
+          border-radius: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0 10px;
+          color: #ffffff;
+          font-size: 13px;
+          font-weight: 700;
+          border: 3px solid #ffffff;
+          box-shadow: 0 3px 10px rgba(0,0,0,0.24);
+          box-sizing: border-box;
+          white-space: nowrap;
+        }
+
+        .route-point-start {
+          background: #1f86ff;
+        }
+
+        .route-point-end {
+          background: #48d10f;
+        }
+
+        .route-point-label {
+          position: absolute;
+          left: 50%;
+          top: 39px;
+          transform: translateX(-50%);
+          max-width: 120px;
+          padding: 5px 8px;
+          border-radius: 12px;
+          background: rgba(255,255,255,0.96);
+          color: #222222;
+          font-size: 11px;
+          font-weight: 600;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.16);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
     </style>
 </head>
 <body>
@@ -67,6 +121,10 @@
 <script>
     let map;
     let markers = [];
+    let placesService;
+    let currentLocationOverlay = null;
+    let startPlaceOverlay = null;
+    let endPlaceOverlay = null;
     let currentCategory = "all";
 
     const DEFAULT_CENTER = {
@@ -75,6 +133,29 @@
     };
 
     const DEFAULT_LEVEL = 3;
+    const LOCAL_SEARCH_PLACES = [
+      {
+        place_name: "한양여자대학교",
+        road_address_name: "서울 성동구 살곶이길 200",
+        address_name: "서울 성동구 사근동 110",
+        y: 37.55917,
+        x: 127.04924
+      },
+      {
+        place_name: "한양대학교 서울캠퍼스",
+        road_address_name: "서울 성동구 왕십리로 222",
+        address_name: "서울 성동구 사근동 110",
+        y: 37.55723,
+        x: 127.04538
+      },
+      {
+        place_name: "한양대학교병원",
+        road_address_name: "서울 성동구 왕십리로 222-1",
+        address_name: "서울 성동구 사근동 110",
+        y: 37.55966,
+        x: 127.04435
+      }
+    ];
 
     function initMap() {
       const container = document.getElementById("map");
@@ -84,6 +165,7 @@
       };
 
       map = new kakao.maps.Map(container, options);
+      placesService = new kakao.maps.services.Places();
       map.setZoomable(true);
     }
 
@@ -225,6 +307,76 @@
       loadPoiData();
     }
 
+    function searchPlaces(keyword) {
+      const query = String(keyword || "").trim();
+      if (!query) return;
+      if (!placesService) {
+        setTimeout(() => searchPlaces(query), 200);
+        return;
+      }
+
+      placesService.keywordSearch(query, (data, status) => {
+        if (status !== kakao.maps.services.Status.OK || !Array.isArray(data)) {
+          console.warn("search failed:", query, status);
+          const fallback = getLocalSearchPlaces(query);
+          if (fallback.length > 0) {
+            renderSearchPlaces(fallback);
+            return;
+          }
+
+          if (window.AndroidBridge && window.AndroidBridge.onSearchResults) {
+            window.AndroidBridge.onSearchResults("[]");
+          }
+          return;
+        }
+
+        renderSearchPlaces(data);
+      }, { size: 15 });
+    }
+
+    function getLocalSearchPlaces(query) {
+      const normalizedQuery = String(query || "").replace(/\s/g, "").toLowerCase();
+
+      if (!normalizedQuery) {
+        return [];
+      }
+
+      return LOCAL_SEARCH_PLACES.filter(place => {
+        const name = String(place.place_name || "").replace(/\s/g, "").toLowerCase();
+        const road = String(place.road_address_name || "").replace(/\s/g, "").toLowerCase();
+        const address = String(place.address_name || "").replace(/\s/g, "").toLowerCase();
+
+        return name.includes(normalizedQuery) ||
+          normalizedQuery.includes(name) ||
+          road.includes(normalizedQuery) ||
+          address.includes(normalizedQuery);
+      });
+    }
+
+    function renderSearchPlaces(data) {
+      const results = [];
+
+      data.forEach(place => {
+        const lat = Number(place.y);
+        const lng = Number(place.x);
+
+        if (Number.isNaN(lat) || Number.isNaN(lng)) {
+          return;
+        }
+
+        results.push({
+          name: place.place_name || "",
+          address: place.road_address_name || place.address_name || "",
+          lat,
+          lng
+        });
+      });
+
+      if (window.AndroidBridge && window.AndroidBridge.onSearchResults) {
+        window.AndroidBridge.onSearchResults(JSON.stringify(results));
+      }
+    }
+
     function zoomIn() {
       if (!map) return;
       map.setLevel(map.getLevel() - 1);
@@ -237,10 +389,115 @@
 
     function moveTo(lat, lng, level) {
       if (!map) return;
-      map.setCenter(new kakao.maps.LatLng(Number(lat), Number(lng)));
-      if (level !== undefined && level !== null) {
-        map.setLevel(Number(level));
+      const latNum = Number(lat);
+      const lngNum = Number(lng);
+
+      if (Number.isNaN(latNum) || Number.isNaN(lngNum)) {
+        return;
       }
+
+      const position = new kakao.maps.LatLng(latNum, lngNum);
+
+      if (level !== undefined && level !== null) {
+        const nextLevel = Number(level);
+        if (!Number.isNaN(nextLevel) && map.getLevel() !== nextLevel) {
+          try {
+            map.setLevel(nextLevel, { animate: true });
+          } catch (error) {
+            map.setLevel(nextLevel);
+          }
+        }
+      }
+
+      map.panTo(position);
+    }
+
+    function setRoutePoint(type, lat, lng, name) {
+      if (!map) {
+        setTimeout(() => setRoutePoint(type, lat, lng, name), 200);
+        return;
+      }
+
+      const latNum = Number(lat);
+      const lngNum = Number(lng);
+
+      if (Number.isNaN(latNum) || Number.isNaN(lngNum)) {
+        return;
+      }
+
+      const position = new kakao.maps.LatLng(latNum, lngNum);
+      const isStart = type === "start";
+      const previousOverlay = isStart ? startPlaceOverlay : endPlaceOverlay;
+
+      if (previousOverlay) {
+        previousOverlay.setMap(null);
+      }
+
+      const wrap = document.createElement("div");
+      wrap.style.position = "relative";
+      wrap.style.display = "inline-flex";
+      wrap.style.justifyContent = "center";
+
+      const badge = document.createElement("div");
+      badge.className = `route-point ${isStart ? "route-point-start" : "route-point-end"}`;
+      badge.textContent = isStart ? "출발" : "도착";
+      wrap.appendChild(badge);
+
+      const label = document.createElement("div");
+      label.className = "route-point-label";
+      label.textContent = String(name || (isStart ? "출발지" : "목적지"));
+      wrap.appendChild(label);
+
+      const overlay = new kakao.maps.CustomOverlay({
+        position,
+        content: wrap,
+        xAnchor: 0.5,
+        yAnchor: 1.4,
+        zIndex: isStart ? 30 : 31
+      });
+
+      overlay.setMap(map);
+
+      if (isStart) {
+        startPlaceOverlay = overlay;
+      } else {
+        endPlaceOverlay = overlay;
+      }
+    }
+
+    function showCurrentLocation(lat, lng) {
+      if (!map) {
+        setTimeout(() => showCurrentLocation(lat, lng), 200);
+        return;
+      }
+
+      const latNum = Number(lat);
+      const lngNum = Number(lng);
+
+      if (Number.isNaN(latNum) || Number.isNaN(lngNum)) {
+        return;
+      }
+
+      const position = new kakao.maps.LatLng(latNum, lngNum);
+
+      if (currentLocationOverlay) {
+        currentLocationOverlay.setMap(null);
+      }
+
+      const markerEl = document.createElement("div");
+      markerEl.className = "current-location-marker";
+
+      currentLocationOverlay = new kakao.maps.CustomOverlay({
+        position,
+        content: markerEl,
+        xAnchor: 0.5,
+        yAnchor: 0.5,
+        zIndex: 10
+      });
+
+      currentLocationOverlay.setMap(map);
+      map.setCenter(position);
+      map.setLevel(3);
     }
 
     function resetMap() {
@@ -254,6 +511,9 @@
     window.moveTo = moveTo;
     window.resetMap = resetMap;
     window.filterMarkers = filterMarkers;
+    window.searchPlaces = searchPlaces;
+    window.setRoutePoint = setRoutePoint;
+    window.showCurrentLocation = showCurrentLocation;
     window.map = map;
 
     window.onload = function () {

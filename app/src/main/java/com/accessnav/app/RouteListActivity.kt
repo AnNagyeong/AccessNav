@@ -15,20 +15,15 @@ class RouteListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRouteListBinding
 
-    private val segments = listOf(
-        RouteSegment("한양여자대학교 정문 도착",
-            "걸어서 30분, 보도블록이 이어지는 경로", "#4CAF50"),
-        RouteSegment("한양여자대학교 도서관 후문 도착",
-            "걸어서 30%, 보도블록에서 이어지는 경로", "#FFC107"),
-        RouteSegment("한양여자대학교 도서관 후문 도착",
-            "걸어서 50%, 최단거리", "#F44336")
-    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRouteListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val destination = intent.getStringExtra("destination") ?: "목적지"
+        val segments = routeSegments(destination)
+
+        binding.tvRouteSummary.text = "${destination}까지 추천 경로 ${segments.size}개"
         binding.rvRouteList.layoutManager = LinearLayoutManager(this)
         binding.rvRouteList.adapter = SegmentAdapter(segments)
 
@@ -60,6 +55,19 @@ class RouteListActivity : AppCompatActivity() {
 
         override fun getItemCount() = items.size
     }
+
+    private fun routeSegments(destination: String) = listOf(
+        RouteSegment(
+            "${destination} 정문 경로",
+            "3분 · 100m · 안전 구간 20%, 주의 구간 80%",
+            "#49D11A"
+        ),
+        RouteSegment(
+            "${destination} 최단 경로",
+            "2분 · 90m · 위험 구간 2곳 포함",
+            "#F26A6A"
+        )
+    )
 }
 
 data class RouteSegment(val title: String, val description: String, val color: String)
